@@ -1,18 +1,18 @@
-import axios from "axios";
-import { LogBox } from "react-native";
 
-const BACKEND_API = "http://192.168.1.7:3000/";
+import { LogBox } from "react-native";
+import { axiosInstance } from "./axios";
+
+
 
 export async function createUser({ email, password, name, age, gender }) {
-  const response = await axios
-    .post(BACKEND_API + "users/register", {
+  const response = await axiosInstance
+    .post("users/register", {
       email,
       password,
       name,
       age,
       gender,
     })
-
 
   const token = response.data.token
   if(token)
@@ -22,8 +22,8 @@ export async function createUser({ email, password, name, age, gender }) {
 }
 
 export async function loginUser({ email, password }) {
-  const response = await axios
-    .get(BACKEND_API + "users/login", {
+  const response = await axiosInstance
+    .get("users/login", {
       params: {
         email,
         password,

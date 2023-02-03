@@ -16,6 +16,7 @@ function LoginScreen() {
       const token =  await loginUser(credentials)
       authCtx.authenticate(token)
     }catch(e){
+      console.log('ERRIR', e);
       Alert.alert('Could not log you in. Please Check your credentials')
       setAuthenticating(false)
     }

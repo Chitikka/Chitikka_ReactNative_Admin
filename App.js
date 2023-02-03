@@ -6,8 +6,10 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import WelcomeScreen from "./screens/WelcomeScreen";
 import { Colors } from "./constants/styles";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext, AuthContextProvider } from "./store/authContext";
+import IconButton from "./components/ui/IconButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +29,7 @@ function AuthStack() {
 }
 
 function AuthenticatedStack() {
+  const authCtx = useContext(AuthContext);
   return (
     <Stack.Navigator
       screenOptions={{
@@ -35,13 +38,26 @@ function AuthenticatedStack() {
         contentStyle: { backgroundColor: Colors.primary100 },
       }}
     >
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{
+          headerRight: ({ tintColor }) => (
+            <IconButton
+              icon="exit"
+              color={tintColor}
+              size={24}
+              onPress={authCtx.logOut}
+            />
+          ),
+        }}
+      />
     </Stack.Navigator>
   );
 }
 
 function Navigation() {
-  const authCtx = useContext(AuthContext)
+  const authCtx = useContext(AuthContext);
   return (
     <NavigationContainer>
       {!authCtx.isAuthenticated && <AuthStack />}
@@ -50,12 +66,30 @@ function Navigation() {
   );
 }
 
+function Root() {
+  const authCtx = useContext(AuthContext);
+  useEffect(() => {
+    async function fetchToken() {
+      try {
+        const storedToken = await AsyncStorage.getItem("token")
+
+        if (storedToken) authCtx.authenticate(storedToken)
+      } catch (e) {
+        console.log('E', e);
+      }
+    }
+    fetchToken();
+  }, []);
+
+  return <Navigation />;
+}
+
 export default function App() {
   return (
     <>
       <StatusBar style="light" />
       <AuthContextProvider>
-        <Navigation />
+        <Root />
       </AuthContextProvider>
     </>
   );

@@ -1,29 +1,35 @@
-import { createContext, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { createContext,  useState } from "react";
+import { axiosInstance } from "../util/axios";
 
 export const AuthContext = createContext({
-    token: '',
-    isAuthenticated: false,
-    aunthenticate: ()=>{},
-    logOut: ()=> {}
-})
+  token: "",
+  isAuthenticated: false,
+  authenticate: () => {},
+  logOut: () => {},
+});
 
-export const AuthContextProvider = ({children}) => {
-    const [authToken, setAuthToken] = useState()
+export const AuthContextProvider = ({ children }) => {
+  const [authToken, setAuthToken] = useState();
 
-    const authenticate = (token) => {
-        setAuthToken(token)
-    }
+  const authenticate = (token) => {
+    axiosInstance.defaults.headers.common["authorization"] = token;
+    setAuthToken(token);
+    AsyncStorage.setItem("token", token);
+  };
 
-    const logOut = () => {
-        setAuthToken(null)
-    }
+  const logOut = () => {
+    delete axiosInstance.defaults.headers.common["authorization"];
+    setAuthToken(null);
+    AsyncStorage.removeItem("token");
+  };
 
-    const value = {
-        token: authToken,
-        isAuthenticated: !!authToken,
-        authenticate,
-        logOut
-    }
+  const value = {
+    token: authToken,
+    isAuthenticated: !!authToken,
+    authenticate,
+    logOut,
+  };
 
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-}
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
