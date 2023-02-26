@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { useState } from "react";
+import { Alert, StyleSheet, View } from "react-native";
 
-import FlatButton from '../ui/FlatButton';
-import AuthForm from './AuthForm';
-import { Colors } from '../../constants/styles';
-import { useNavigation } from '@react-navigation/native';
+import FlatButton from "../ui/FlatButton";
+import AuthForm from "./AuthForm";
+import { Colors } from "../../constants/styles";
+import { useNavigation } from "@react-navigation/native";
+import { ScrollView } from "react-native-gesture-handler";
 
 function AuthContent({ isLogin, onAuthenticate }) {
-
-  const navigation = useNavigation()
+  const navigation = useNavigation();
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
     password: false,
@@ -17,10 +17,8 @@ function AuthContent({ isLogin, onAuthenticate }) {
   });
 
   function switchAuthModeHandler() {
-    if(isLogin)
-      navigation.navigate('Signup')
-    else
-      navigation.navigate('Login')
+    if (isLogin) navigation.navigate("Signup");
+    else navigation.navigate("Login");
   }
 
   function submitHandler(credentials) {
@@ -29,16 +27,12 @@ function AuthContent({ isLogin, onAuthenticate }) {
     email = email.trim();
     password = password.trim();
 
-    const emailIsValid = email.includes('@');
+    const emailIsValid = email.includes("@");
     const passwordIsValid = password.length > 6;
     const passwordsAreEqual = password === confirmPassword;
 
-    if (
-      !emailIsValid ||
-      !passwordIsValid ||
-      (!isLogin && !passwordsAreEqual)
-    ) {
-      Alert.alert('Invalid input', 'Please check your entered credentials.');
+    if (!emailIsValid || !passwordIsValid || (!isLogin && !passwordsAreEqual)) {
+      Alert.alert("Invalid input", "Please check your entered credentials.");
       setCredentialsInvalid({
         email: !emailIsValid,
         password: !passwordIsValid,
@@ -46,11 +40,11 @@ function AuthContent({ isLogin, onAuthenticate }) {
       });
       return;
     }
-    onAuthenticate({ email, password, age,name, gender });
+    onAuthenticate({ email, password, age, name, gender });
   }
 
   return (
-    <View style={styles.authContent}>
+    <ScrollView style={styles.authContent}>
       <AuthForm
         isLogin={isLogin}
         onSubmit={submitHandler}
@@ -58,10 +52,10 @@ function AuthContent({ isLogin, onAuthenticate }) {
       />
       <View style={styles.buttons}>
         <FlatButton onPress={switchAuthModeHandler}>
-          {isLogin ? 'Create a new user' : 'Log in instead'}
+          {isLogin ? "Create a new user" : "Log in instead"}
         </FlatButton>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -75,7 +69,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: Colors.primary800,
     elevation: 2,
-    shadowColor: 'black',
+    shadowColor: "black",
     shadowOffset: { width: 1, height: 1 },
     shadowOpacity: 0.35,
     shadowRadius: 4,
