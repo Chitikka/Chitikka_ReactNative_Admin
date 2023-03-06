@@ -1,10 +1,14 @@
 
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import Button from "../components/ui/Button";
+import { AuthContext } from "../store/authContext";
 import { axiosInstance } from "../util/axios";
 
 function WelcomeScreen() {
   const [msg, setMsg] = useState("");
+  const navigation = useNavigation();
 
   useEffect(() => {
     async function fetchData() {
@@ -23,8 +27,10 @@ function WelcomeScreen() {
   return (
     <View style={styles.rootContainer}>
       <Text style={styles.title}>Welcome!</Text>
-      <Text>You authenticated successfully!</Text>
+      <Text>You authenticated successfully! {}</Text>
       <Text>Welcome {msg}!</Text>
+      <Button onPress={()=>navigation.navigate("Products")}>View your products</Button>
+      <Button onPress={()=>navigation.navigate("AddProduct")}>Add product</Button>
     </View>
   );
 }

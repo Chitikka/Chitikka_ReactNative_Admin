@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 
 import Button from "../ui/Button";
 import Input from "./Input";
@@ -49,71 +50,63 @@ function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
       confirmPassword: enteredConfirmPassword,
       age: enteredAge,
       name: enteredName,
-      gender: enteredGender
+      gender: enteredGender,
     });
   }
 
   return (
-    <View style={styles.form}>
-      <View>
-        <Input
-          label="Email Address"
-          onUpdateValue={updateInputValueHandler.bind(this, "email")}
-          value={enteredEmail}
-          keyboardType="email-address"
-          isInvalid={emailIsInvalid}
-        />
-        {!isLogin && (
-          <>
-            <Input
-              label="Name"
-              onUpdateValue={updateInputValueHandler.bind(this, "name")}
-              value={enteredName}
-              keyboardType="default"
-            
-            />
-            <Input
-              label="Age"
-              onUpdateValue={updateInputValueHandler.bind(this, "age")}
-              value={enteredAge}
-              keyboardType="number-pad"
-            
-            />
-            <Input
-              label="Gender"
-              onUpdateValue={updateInputValueHandler.bind(this, "gender")}
-              value={enteredGender}
-              keyboardType="text"
-            
-            />
-          </>
-        )}
-        <Input
-          label="Password"
-          onUpdateValue={updateInputValueHandler.bind(this, "password")}
-          secure
-          value={enteredPassword}
-          isInvalid={passwordIsInvalid}
-        />
-        {!isLogin && (
+    <ScrollView style={styles.form}>
+      <Input
+        label="Email Address"
+        onUpdateValue={updateInputValueHandler.bind(this, "email")}
+        value={enteredEmail}
+        keyboardType="email-address"
+        isInvalid={emailIsInvalid}
+      />
+      {!isLogin && (
+        <>
           <Input
-            label="Confirm Password"
-            onUpdateValue={updateInputValueHandler.bind(
-              this,
-              "confirmPassword"
-            )}
-            secure
-            value={enteredConfirmPassword}
-            isInvalid={passwordsDontMatch}
+            label="Name"
+            onUpdateValue={updateInputValueHandler.bind(this, "name")}
+            value={enteredName}
+            keyboardType="default"
           />
-        )}
-        <View style={styles.buttons}>
-          <Button onPress={submitHandler}>
-            {isLogin ? "Log In" : "Sign Up"}
-          </Button>
-        </View>
+          <Input
+            label="Age"
+            onUpdateValue={updateInputValueHandler.bind(this, "age")}
+            value={enteredAge}
+            keyboardType="number-pad"
+          />
+          <Input
+            label="Gender"
+            onUpdateValue={updateInputValueHandler.bind(this, "gender")}
+            value={enteredGender}
+            keyboardType="text"
+          />
+        </>
+      )}
+      <Input
+        label="Password"
+        onUpdateValue={updateInputValueHandler.bind(this, "password")}
+        secure
+        value={enteredPassword}
+        isInvalid={passwordIsInvalid}
+      />
+      {!isLogin && (
+        <Input
+          label="Confirm Password"
+          onUpdateValue={updateInputValueHandler.bind(this, "confirmPassword")}
+          secure
+          value={enteredConfirmPassword}
+          isInvalid={passwordsDontMatch}
+        />
+      )}
+      <View style={styles.buttons}>
+        <Button onPress={submitHandler}>
+          {isLogin ? "Log In" : "Sign Up"}
+        </Button>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

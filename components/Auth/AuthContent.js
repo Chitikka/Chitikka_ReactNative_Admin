@@ -44,7 +44,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
   }
 
   return (
-    <ScrollView style={styles.authContent}>
+    <View style={styles.authContent}>
       <AuthForm
         isLogin={isLogin}
         onSubmit={submitHandler}
@@ -55,7 +55,7 @@ function AuthContent({ isLogin, onAuthenticate }) {
           {isLogin ? "Create a new user" : "Log in instead"}
         </FlatButton>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 

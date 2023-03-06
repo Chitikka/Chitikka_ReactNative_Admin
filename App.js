@@ -10,6 +10,8 @@ import { useContext, useEffect } from "react";
 import { AuthContext, AuthContextProvider } from "./store/authContext";
 import IconButton from "./components/ui/IconButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import ProductsScreen from "./screens/ProductsScreen";
+import AddProductsScreen from "./screens/AddProductsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,22 +38,19 @@ function AuthenticatedStack() {
         headerStyle: { backgroundColor: Colors.primary500 },
         headerTintColor: "white",
         contentStyle: { backgroundColor: Colors.primary100 },
+        headerRight: ({ tintColor }) => (
+          <IconButton
+            icon="exit"
+            color={tintColor}
+            size={24}
+            onPress={authCtx.logOut}
+          />
+        ),
       }}
     >
-      <Stack.Screen
-        name="Welcome"
-        component={WelcomeScreen}
-        options={{
-          headerRight: ({ tintColor }) => (
-            <IconButton
-              icon="exit"
-              color={tintColor}
-              size={24}
-              onPress={authCtx.logOut}
-            />
-          ),
-        }}
-      />
+      <Stack.Screen name="Welcome" component={WelcomeScreen} />
+      <Stack.Screen name="Products" component={ProductsScreen} />
+      <Stack.Screen name="AddProduct" component={AddProductsScreen} />
     </Stack.Navigator>
   );
 }
@@ -71,11 +70,11 @@ function Root() {
   useEffect(() => {
     async function fetchToken() {
       try {
-        const storedToken = await AsyncStorage.getItem("token")
+        const storedToken = await AsyncStorage.getItem("token");
 
-        if (storedToken) authCtx.authenticate(storedToken)
+        if (storedToken) authCtx.authenticate(storedToken);
       } catch (e) {
-        console.log('E', e);
+        console.log("E", e);
       }
     }
     fetchToken();
